@@ -1,8 +1,11 @@
-// views/gallery_view.dart
 import 'package:flutter/material.dart';
 import 'package:gallery_app/features/gallery/presentation/controller/gallery_controller.dart';
+import 'package:gallery_app/features/gallery/presentation/pages/preview_view.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+
+// Gallery view it is showing image grid
 
 class GalleryView extends StatelessWidget {
   const GalleryView({super.key});
@@ -58,80 +61,85 @@ class GalleryView extends StatelessWidget {
               itemCount: controller.images.length,
               itemBuilder: (context, index) {
                 final image = controller.images[index];
-                return Card(
-                  elevation: 6,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  shadowColor: Colors.teal[700],
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            imageUrl: image.imageUrl,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.deepOrangeAccent,
-                                  strokeWidth: 2,
+                return InkWell(
+                  onTap: () =>
+                      Get.to(() => PreviewView(imageUrl: image.imageUrl)),
+                  child: Card(
+                    elevation: 6,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    shadowColor: Colors.teal[700],
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              imageUrl: image.imageUrl,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.deepOrangeAccent,
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                               ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error, color: Colors.red),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error, color: Colors.red),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(Icons.thumb_up,
-                                        color: Colors.deepOrangeAccent,
-                                        size: 18),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      '${image.likes}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black87,
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.thumb_up,
+                                          color: Colors.deepOrangeAccent,
+                                          size: 18),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '${image.likes}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.visibility,
-                                        color: Colors.deepOrangeAccent,
-                                        size: 18),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      '${image.views}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black87,
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.visibility,
+                                          color: Colors.deepOrangeAccent,
+                                          size: 18),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '${image.views}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -141,6 +149,9 @@ class GalleryView extends StatelessWidget {
       ),
     );
   }
+
+
+  // Based on screen size changing grid counts
 
   int _getCrossAxisCount(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

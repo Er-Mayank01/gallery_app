@@ -15,6 +15,9 @@ class GalleryController extends GetxController {
     super.onInit();
   }
 
+
+  // Fetching images with pagination
+
   void fetchImages() async {
     try {
       isLoading(true);
