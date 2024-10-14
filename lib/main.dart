@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_app/core/theme/app_theme.dart';
+import 'package:gallery_app/routes/routes_imports.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:gallery_app/features/gallery/presentation/pages/gallery_view.dart';
-import 'package:gallery_app/features/gallery/presentation/pages/preview_view.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
-  runApp(const MyApp());
+  setPathUrlStrategy();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return GetMaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Pixabay Gallery',
       theme: AppTheme.lightTheme,
-      initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => const GalleryView()),
-        GetPage(name: '/preview', page: () => const PreviewView()),
-      ],
+      routerDelegate: appRouter.delegate(),
+      routeInformationParser: appRouter.defaultRouteParser(),
     );
   }
 }

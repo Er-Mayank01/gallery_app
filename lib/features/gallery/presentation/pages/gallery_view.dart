@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_app/core/theme/app_theme.dart';
 import 'package:gallery_app/features/gallery/presentation/controller/gallery_controller.dart';
+import 'package:gallery_app/routes/routes_imports.gr.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 
+@RoutePage()
 class GalleryView extends StatelessWidget {
   const GalleryView({super.key});
 
@@ -46,11 +49,9 @@ class GalleryView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final image = controller.images[index];
                 return InkWell(
-                  onTap: () => Get.toNamed('/preview', arguments: {
-                    'imageUrl': image.imageUrl,
-                    'likes': image.likes,
-                    'views': image.views
-                  }),
+                  onTap: () => AutoRouter.of(context).push(
+                    PreviewViewRoute(image: image),
+                  ),
                   child: Card(
                     elevation: 6,
                     shape: RoundedRectangleBorder(
