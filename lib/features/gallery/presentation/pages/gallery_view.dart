@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gallery_app/core/theme/app_theme.dart';
 import 'package:gallery_app/features/gallery/presentation/controller/gallery_controller.dart';
-import 'package:gallery_app/features/gallery/presentation/pages/preview_view.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-
-// Gallery view it is showing image grid
+import '../../../../core/widgets/custom_app_bar.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({super.key});
@@ -14,24 +12,10 @@ class GalleryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final GalleryController controller = Get.put(GalleryController());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pixabay Gallery',
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white)),
-        backgroundColor: Colors.teal[700],
-        centerTitle: true,
-        elevation: 10,
-      ),
+      appBar:
+          const CustomAppBar(title: 'Pixabay Gallery', showBackButton: false),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.tealAccent[100]!, Colors.teal[400]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+        decoration: AppTheme.pageBackgroundGradient(),
         child: Obx(() {
           if (controller.isLoading.value && controller.images.isEmpty) {
             return const Center(
@@ -62,8 +46,11 @@ class GalleryView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final image = controller.images[index];
                 return InkWell(
-                  onTap: () =>
-                      Get.to(() => PreviewView(imageUrl: image.imageUrl)),
+                  onTap: () => Get.toNamed('/preview', arguments: {
+                    'imageUrl': image.imageUrl,
+                    'likes': image.likes,
+                    'views': image.views
+                  }),
                   child: Card(
                     elevation: 6,
                     shape: RoundedRectangleBorder(
@@ -149,9 +136,6 @@ class GalleryView extends StatelessWidget {
       ),
     );
   }
-
-
-  // Based on screen size changing grid counts
 
   int _getCrossAxisCount(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
